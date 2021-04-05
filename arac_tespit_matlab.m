@@ -22,7 +22,7 @@ function varargout = arac_tespit_matlab(varargin)
 
 % Edit the above text to modify the response to help arac_tespit_matlab
 
-% Last Modified by GUIDE v2.5 29-Mar-2021 16:35:56
+% Last Modified by GUIDE v2.5 05-Apr-2021 19:25:24
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -131,3 +131,10 @@ global filename;
 [filename pathname]=uigetfile({'*'},'File Selector');
 fullpathname=strcat(pathname,filename);
 set(handles.userInput,'String',filename);
+
+
+% --- Executes during object creation, after setting all properties.
+function toplamSayi_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to toplamSayi (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called

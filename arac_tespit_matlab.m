@@ -99,23 +99,41 @@ function edit1_CreateFcn(hObject, eventdata, handles)
 % Hint: edit controls usually have a white background on Windows.
 %       See ISPC and COMPUTER.
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject,'BackgroundColor','white');
+    
+     set(hObject,'BackgroundColor','white');
+   
 end
-
-
-% --- Executes on button press in pushbutton3.
-function pushbutton3_Callback(hObject, eventdata, handles)
-% hObject    handle to pushbutton3 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
 
 
 % --- Executes during object creation, after setting all properties.
 function userInput_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    
     set(hObject,'BackgroundColor','white');
+    
 end
 
+
+% --- Executes on button press in pushbutton3.
+function calistir_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton3 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+global cleanForeground;
+global foreground;
+global filename;
+
+videoReader = vision.VideoFileReader(filename); 
+videoPlayer = vision.VideoPlayer;
+fgPlayer = vision.VideoPlayer;
+
+
+foregroundDetector = vision.ForegroundDetector('NumGaussians', 3,'NumTrainingFrames', 50);
+ 
+for i = 1:150
+    videoFrame = step(videoReader);
+    foreground = step(foregroundDetector,videoFrame);
+end
 
 
 % --- Executes on button press in pushbutton4.
@@ -125,12 +143,17 @@ function pushbutton4_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 
+
 % --- Executes on button press in pushbutton5.
 function pushbutton5_Callback(hObject, eventdata, handles)
 global filename;
 [filename pathname]=uigetfile({'*'},'File Selector');
+
 fullpathname=strcat(pathname,filename);
+
 set(handles.userInput,'String',filename);
+
+
 
 
 % --- Executes during object creation, after setting all properties.

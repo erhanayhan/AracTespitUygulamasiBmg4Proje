@@ -135,6 +135,28 @@ for i = 1:150
     foreground = step(foregroundDetector,videoFrame);
 end
 
+figure;
+imshow(videoFrame);
+title('Input Frame');
+figure;
+imshow(foreground);
+title('Foreground');
+ 
+cleanForeground = imopen(foreground, strel('Disk',1));
+figure;
+subplot(1,2,1);imshow(foreground);title('Original Foreground');
+subplot(1,2,2);imshow(cleanForeground);title('Clean Foreground');
+
+
+blobAnalysis = vision.BlobAnalysis('BoundingBoxOutputPort', true, ...
+    'AreaOutputPort', false, 'CentroidOutputPort', false, ...
+    'MinimumBlobArea', 150);
+ 
+
+global aracSay preNumcars
+aracSay=0;
+preNumcars=0;
+
 
 % --- Executes on button press in pushbutton4.
 function pushbutton4_Callback(hObject, eventdata, handles)

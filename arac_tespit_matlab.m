@@ -157,6 +157,29 @@ global aracSay preNumcars
 aracSay=0;
 preNumcars=0;
 
+while  ~isDone(videoReader)
+    global aracSay preNumcars
+    videoFrame = step(videoReader);
+    foreground = step(foregroundDetector,videoFrame);
+    cleanForeground = imopen(foreground, strel('Disk',1));
+    bbox = step(blobAnalysis, cleanForeground);
+ 
+    result = insertShape(videoFrame, 'Rectangle', bbox, 'Color', 'green');
+    numCars = size(bbox, 1);
+    
+    text = sprintf('Anlýk Araç Sayýsý : %d',numCars);
+    
+    result = insertText(result, [10 10], text, 'BoxOpacity', 1, ...
+        'FontSize', 14);
+    
+    result = insertText(result, [10 40], text2, 'BoxOpacity', 1, ...
+        'FontSize', 14);
+ 
+     step(videoPlayer, result);
+     %step(fgPlayer,cleanForeground);
+ 
+    
+end
 
 % --- Executes on button press in pushbutton4.
 function pushbutton4_Callback(hObject, eventdata, handles)

@@ -135,14 +135,14 @@ for i = 1:150
     foreground = step(foregroundDetector,videoFrame);
 end
 
-figure;
-imshow(videoFrame);
-title('Input Frame');
-figure;
-imshow(foreground);
-title('Foreground');
+%figure;
+%imshow(videoFrame);
+%title('Input Frame');
+%figure;
+%imshow(foreground);
+%title('Foreground');
  
-cleanForeground = imopen(foreground, strel('Disk',1));
+%cleanForeground = imopen(foreground, strel('Disk',1));
 figure;
 subplot(1,2,1);imshow(foreground);title('Original Foreground');
 subplot(1,2,2);imshow(cleanForeground);title('Clean Foreground');
@@ -165,13 +165,21 @@ while  ~isDone(videoReader)
     bbox = step(blobAnalysis, cleanForeground);
  
     result = insertShape(videoFrame, 'Rectangle', bbox, 'Color', 'green');
+   
     numCars = size(bbox, 1);
+    if (numCars > preNumcars)
+        aracSay=aracSay+(numCars-preNumcars);
+    end
+    preNumcars = numCars;
+    
     
     text = sprintf('Anlýk Araç Sayýsý : %d',numCars);
     
     result = insertText(result, [10 10], text, 'BoxOpacity', 1, ...
         'FontSize', 14);
     
+    
+    text2 = sprintf('Toplam Araç Sayýsý : %d',aracSay);
     result = insertText(result, [10 40], text2, 'BoxOpacity', 1, ...
         'FontSize', 14);
  
@@ -180,12 +188,18 @@ while  ~isDone(videoReader)
  
     
 end
+release(videoPlayer);
+%release(videoReader);
+%release(fgPlayer);
+set(handles.toplamSayi,'String',aracSay);
+
 
 % --- Executes on button press in pushbutton4.
 function pushbutton4_Callback(hObject, eventdata, handles)
-% hObject    handle to pushbutton4 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
+global cleanForeground;
+axes(handles.axes1)
+imshow(cleanForeground);
+
 
 
 
@@ -193,9 +207,7 @@ function pushbutton4_Callback(hObject, eventdata, handles)
 function pushbutton5_Callback(hObject, eventdata, handles)
 global filename;
 [filename pathname]=uigetfile({'*'},'File Selector');
-
 fullpathname=strcat(pathname,filename);
-
 set(handles.userInput,'String',filename);
 
 
